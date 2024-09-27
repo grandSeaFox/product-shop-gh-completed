@@ -1,6 +1,7 @@
 # SFE take-home exercise
 
-https://product-shop-gh.vercel.app/
+https://product-shop-gh-completed.vercel.app/
+
 
 ## Getting Started
 
