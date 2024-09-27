@@ -11,12 +11,14 @@ import { toast } from '@/lib/hooks/use-toast';
 const Cart = ({onCompletePurchase} : {onCompletePurchase?: () => void}) => {
     const { cart, removeFromCart, updateQuantity, getCartTotal, error} = useCart();
     const isMobile = useIsMobile();
+    const orderId = localStorage.getItem('orderId') || 0;
+
 
     if(error) toast({variant: 'destructive', title: error})
 
     return (
         <div className="p-4 h-full">
-            <h2 className="text-2xl font-bold mb-4">Your Cart - order {localStorage.getItem('orderId')}</h2>
+            <h2 className="text-2xl font-bold mb-4">Your Cart - order {orderId}</h2>
             {cart.length === 0 ? (
                 <p>Your cart is empty.</p>
             ) : (
