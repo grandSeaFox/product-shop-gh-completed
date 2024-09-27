@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Minus, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import useIsMobile from '@/lib/hooks/useIsMobile';
@@ -11,7 +11,14 @@ import { toast } from '@/lib/hooks/use-toast';
 const Cart = ({onCompletePurchase} : {onCompletePurchase?: () => void}) => {
     const { cart, removeFromCart, updateQuantity, getCartTotal, error} = useCart();
     const isMobile = useIsMobile();
-    const orderId = localStorage.getItem('orderId') || 0;
+    const [orderId, setOrderId] = useState<string>();
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const storedOrderId = localStorage.getItem('orderId');
+            setOrderId(storedOrderId || '0');
+        }
+    }, []);
 
 
     if(error) toast({variant: 'destructive', title: error})
@@ -31,17 +38,19 @@ const Cart = ({onCompletePurchase} : {onCompletePurchase?: () => void}) => {
                                         <span className="font-medium">{item.name}</span>
                                         <div className="flex items-center mt-1">
                                             <Button
-                                              variant="outline"
-                                              size="sm"
-                                              onClick={() => updateQuantity(item.id, -1)}
+                                                data-testid="button-minus"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => updateQuantity(item.id, -1)}
                                             >
                                                 <Minus className="h-4 w-4" />
                                             </Button>
                                             <span className="mx-2 px-2">{item.quantity}</span>
                                             <Button
-                                              variant="outline"
-                                              size="sm"
-                                              onClick={() => updateQuantity(item.id, 1)}
+                                                data-testid="button-plus"
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => updateQuantity(item.id, 1)}
                                             >
                                                 <Plus className="h-4 w-4" />
                                             </Button>
@@ -51,6 +60,7 @@ const Cart = ({onCompletePurchase} : {onCompletePurchase?: () => void}) => {
                                 </div>
                                 <div className="flex items-center">
                                     <Button
+                                        data-testid="button-remove"
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => removeFromCart(item.id)}
